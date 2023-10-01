@@ -3,40 +3,34 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: Contract
+    name: Seneschal
     network: gnosis
     source:
-      address: "0x86589bd15B41fca251e816243B70aE7fa1aE9cE6"
-      abi: Contract
-      startBlock: 29721362
+      address: '0x523C79b8765196a261a0e9D0798F076Aca05Fce6'
+      abi: Seneschal
+      startBlock: 30013245
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - ClaimDelaySet
         - Claimed
         - Cleared
-        - Initialized
         - Poke
-        - Processed
+        - Witnessed
         - Sponsored
       abis:
-        - name: Contract
-          file: ./abis/Contract.json
+        - name: Seneschal
+          file: ./abis/Seneschal.json
       eventHandlers:
-        - event: ClaimDelaySet(uint256)
-          handler: handleClaimDelaySet
-        - event: Claimed(indexed address,indexed bytes32)
+        - event: Claimed(indexed bytes32)
           handler: handleClaimed
-        - event: Cleared(indexed bytes32)
+        - event: Cleared(indexed address,indexed bytes32)
           handler: handleCleared
-        - event: Initialized(uint8)
-          handler: handleInitialized
-        - event: Poke(indexed address,indexed bytes32,bytes32)
+        - event: Poke(indexed address,indexed bytes32,string)
           handler: handlePoke
-        - event: Processed(indexed address,indexed address,indexed bytes32)
-          handler: handleProcessed
-        - event: Sponsored(indexed address,indexed address,indexed bytes32,(uint256,uint256,uint256,uint256,uint256,uint256,bytes32,address,address))
+        - event: Witnessed(indexed address,indexed bytes32)
+          handler: handleWitnessed
+        - event: Sponsored(indexed address,indexed bytes32,(uint256,uint256,uint256,uint256,uint256,uint256,uint256,string,string,address,address))
           handler: handleSponsored
-      file: ./src/contract.ts
+      file: ./src/seneschal.ts

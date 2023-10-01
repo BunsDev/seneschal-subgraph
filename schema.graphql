@@ -1,70 +1,72 @@
-type ClaimDelaySet @entity(immutable: true) {
-  id: Bytes!
-  delay: BigInt! # uint256
+enum ProposalStatus {
+  Sponsored
+  Witnessed
+  Claimed
+  Cleared
+  Poked
+}
+
+type Proposal @entity {
+  id: ID!
+  sponsor: Bytes!
+  witness: Bytes
+  recipient: Bytes!
+  status: ProposalStatus!
+  commitmentDetails: Commitment!
+  sponsoringDetails: SponsoringDetails!
+  witnessingDetails: WitnessingDetails
+  claimingDetails: ClaimingDetails
+  pokingDetails: PokingDetails
+  clearingDetails: ClearingDetails
+}
+
+type Commitment @entity {
+  id: ID!
+  eligibleHat: BigInt!
+  shares: BigInt!
+  loot: BigInt!
+  extraRewardAmount: BigInt!
+  timeFactor: BigInt!
+  sponsoredTime: BigInt!
+  expirationTime: BigInt!
+  contextURL: String!
+  metadata: String!
+  recipient: Bytes!
+  extraRewardToken: Bytes!
+}
+
+type SponsoringDetails @entity {
+  id: ID!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Claimed @entity(immutable: true) {
-  id: Bytes!
-  recipient: Bytes! # address
-  commitmentHash: Bytes! # bytes32
+type WitnessingDetails @entity {
+  id: ID!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Cleared @entity(immutable: true) {
-  id: Bytes!
-  commitmentHash: Bytes! # bytes32
+type ClaimingDetails @entity {
+  id: ID!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Initialized @entity(immutable: true) {
-  id: Bytes!
-  version: Int! # uint8
+type PokingDetails @entity {
+  id: ID!
+  completionReport: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
 
-type Poke @entity(immutable: true) {
-  id: Bytes!
-  recipient: Bytes! # address
-  commitmentHash: Bytes! # bytes32
-  completionReport: Bytes! # bytes32
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Processed @entity(immutable: true) {
-  id: Bytes!
-  processor: Bytes! # address
-  recipient: Bytes! # address
-  commitmentHash: Bytes! # bytes32
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
-  transactionHash: Bytes!
-}
-
-type Sponsored @entity(immutable: true) {
-  id: Bytes!
-  sponsor: Bytes! # address
-  recipient: Bytes! # address
-  commitmentHash: Bytes! # bytes32
-  commitment_eligibleHat: BigInt! # uint256
-  commitment_shares: BigInt! # uint256
-  commitment_loot: BigInt! # uint256
-  commitment_extraRewardAmount: BigInt! # uint256
-  commitment_timeFactor: BigInt! # uint256
-  commitment_sponsoredTime: BigInt! # uint256
-  commitment_contentDigest: Bytes! # bytes32
-  commitment_recipient: Bytes! # address
-  commitment_extraRewardToken: Bytes! # address
+type ClearingDetails @entity {
+  id: ID!
+  clearedBy: Bytes!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
